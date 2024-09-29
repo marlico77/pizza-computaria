@@ -13,28 +13,28 @@ const addressWarn = document.getElementById("address-warn")
 let cart = [];
 
 // Abrir o modal do carrinho
-cartBtn.addEventListener("click", function() { 
+cartBtn.addEventListener("click", function () {
   updateCartModal();
   cartModal.style.display = "flex"
 })
 
 // Fechar o modal quando clicar fora
-cartModal.addEventListener("click", function(event){
-  if(event.target === cartModal){
+cartModal.addEventListener("click", function (event) {
+  if (event.target === cartModal) {
     cartModal.style.display = "none"
   }
 })
 
-closeModalBtn.addEventListener("click", function(){
+closeModalBtn.addEventListener("click", function () {
   cartModal.style.display = "none"
 })
 
 
-menu.addEventListener("click", function(event){
+menu.addEventListener("click", function (event) {
   // console.log(event.target)
   let parentButton = event.target.closest(".add-to-cart-btn")
 
-  if(parentButton){
+  if (parentButton) {
     const name = parentButton.getAttribute("data-name")
     const price = parseFloat(parentButton.getAttribute("data-price"))
     addToCart(name, price)
@@ -44,14 +44,14 @@ menu.addEventListener("click", function(event){
 
 
 // Função para adicionar no carrinho
-function addToCart(name, price){
+function addToCart(name, price) {
   const existingItem = cart.find(item => item.name === name)
 
-  if(existingItem){
-   //Se o item já existe, aumenta apenas a quantidade + 1 
-   existingItem.quantity += 1;
+  if (existingItem) {
+    //Se o item já existe, aumenta apenas a quantidade + 1 
+    existingItem.quantity += 1;
 
-  }else{
+  } else {
 
     cart.push({
       name,
@@ -67,7 +67,7 @@ function addToCart(name, price){
 
 
 //Atualiza o carrinho
-function updateCartModal(){
+function updateCartModal() {
   cartItemsContainer.innerHTML = "";
   let total = 0;
 
@@ -108,8 +108,8 @@ function updateCartModal(){
 
 
 // Função para remover o item do carrinho
-cartItemsContainer.addEventListener("click", function (event){
-  if(event.target.classList.contains("remove-from-cart-btn")){
+cartItemsContainer.addEventListener("click", function (event) {
+  if (event.target.classList.contains("remove-from-cart-btn")) {
     const name = event.target.getAttribute("data-name")
 
     removeItemCart(name);
@@ -117,13 +117,13 @@ cartItemsContainer.addEventListener("click", function (event){
 
 })
 
-function removeItemCart(name){
+function removeItemCart(name) {
   const index = cart.findIndex(item => item.name === name);
 
-  if(index !== -1){
+  if (index !== -1) {
     const item = cart[index];
-    
-    if(item.quantity > 1){
+
+    if (item.quantity > 1) {
       item.quantity -= 1;
       updateCartModal();
       return;
@@ -137,10 +137,10 @@ function removeItemCart(name){
 }
 
 
-addressInput.addEventListener("input", function(event){
+addressInput.addEventListener("input", function (event) {
   let inputValue = event.target.value;
 
-  if(inputValue !== ""){
+  if (inputValue !== "") {
     addressInput.classList.remove("border-red-500")
     addressWarn.classList.add("hidden")
   }
@@ -150,10 +150,10 @@ addressInput.addEventListener("input", function(event){
 
 
 // Finalizar pedido
-checkoutBtn.addEventListener("click", function(){
+checkoutBtn.addEventListener("click", function () {
 
   const isOpen = checkRestaurantOpen();
-  if(!isOpen){
+  if (!isOpen) {
 
     Toastify({
       text: "Ops o restaurante está fechado!",
@@ -170,8 +170,8 @@ checkoutBtn.addEventListener("click", function(){
     return;
   }
 
-  if(cart.length === 0) return;
-  if(addressInput.value === ""){
+  if (cart.length === 0) return;
+  if (addressInput.value === "") {
     addressWarn.classList.remove("hidden")
     addressInput.classList.add("border-red-500")
     return;
@@ -196,10 +196,10 @@ checkoutBtn.addEventListener("click", function(){
 
 
 // Verificar a hora e manipular o card horario
-function checkRestaurantOpen(){
+function checkRestaurantOpen() {
   const data = new Date();
   const hora = data.getHours();
-  return hora >= 9 && hora < 23; 
+  return hora >= 9 && hora < 23;
   //true = restaurante está aberto 
 }
 
@@ -207,10 +207,10 @@ function checkRestaurantOpen(){
 const spanItem = document.getElementById("date-span")
 const isOpen = checkRestaurantOpen();
 
-if(isOpen){
+if (isOpen) {
   spanItem.classList.remove("bg-red-500");
   spanItem.classList.add("bg-green-600")
-}else{
+} else {
   spanItem.classList.remove("bg-green-600")
   spanItem.classList.add("bg-red-500")
 }
