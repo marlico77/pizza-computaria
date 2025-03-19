@@ -179,20 +179,20 @@ checkoutBtn.addEventListener("click", function () {
 
   //Enviar o pedido para api whats
   const cartItems = cart.map((item) => {
+    const totalItemPrice = item.price * item.quantity;
     return (
-      ` ${item.name} Quantidade: (${item.quantity}) Preço: R$${item.price} |`
-    )
-  }).join("")
+      ` ${item.name} Quantidade: (${item.quantity}) Preço Total: R$ ${totalItemPrice.toFixed(2)} |`
+    );
+  }).join("");
 
-  const message = encodeURIComponent(cartItems)
-  const phone = "5511950345277"
+  const message = encodeURIComponent(cartItems);
+  const phone = "5511950345277";
 
-  window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
+  window.open(`https://wa.me/${phone}?text=${message} Cliente: ${addressInput.value}`, "_blank");
 
   cart = [];
   updateCartModal();
-
-})
+});
 
 
 // Verificar a hora e manipular o card horario
