@@ -12,11 +12,19 @@ const addressWarn = document.getElementById("address-warn")
 
 let cart = [];
 
+
+// Função para gerar um número de pedido único
+function generateOrderId() {
+  return Math.floor(Math.random() * 999) + 1;
+}
+
 // Abrir o modal do carrinho
 cartBtn.addEventListener("click", function () {
   updateCartModal();
   cartModal.style.display = "flex"
 })
+
+
 
 // Fechar o modal quando clicar fora
 cartModal.addEventListener("click", function (event) {
@@ -151,47 +159,54 @@ addressInput.addEventListener("input", function (event) {
 
 // Finalizar pedido
 checkoutBtn.addEventListener("click", function () {
-
   const isOpen = checkRestaurantOpen();
   if (!isOpen) {
-
     Toastify({
       text: "Ops o restaurante está fechado!",
       duration: 3000,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "right", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
       style: {
         background: "#ef4444",
       },
     }).showToast();
-
     return;
   }
 
   if (cart.length === 0) return;
   if (addressInput.value === "") {
-    addressWarn.classList.remove("hidden")
-    addressInput.classList.add("border-red-500")
+    addressWarn.classList.remove("hidden");
+    addressInput.classList.add("border-red-500");
     return;
   }
 
-  //Enviar o pedido para api whats
-  const cartItems = cart.map((item) => {
-    const totalItemPrice = item.price * item.quantity;
-    return (
-      ` ${item.name} Quantidade: (${item.quantity}) Preço Total: R$ ${totalItemPrice.toFixed(2)} |`
-    );
-  }).join("");
+  // Gerar o número do pedido
+  const orderId = generateOrderId();
 
-  const message = encodeURIComponent(cartItems);
+  //Enviar o pedido para api whats
+  const cartItems = cart
+    .map((item) => {
+      const totalItemPrice = item.price * item.quantity;
+      return `${item.name} Quantidade: (${item.quantity}) Preço Total: R$ ${totalItemPrice.toFixed(
+        2
+      )} |`;
+    })
+    .join("");
+
+  const message = encodeURIComponent(
+    `Número do Pedido: ${orderId} | ${cartItems} Cliente: ${addressInput.value}`
+  );
   const phone = "5511950345277";
 
-  window.open(`https://wa.me/${phone}?text=${message} Cliente: ${addressInput.value}`, "_blank");
+  window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
 
   cart = [];
   updateCartModal();
+
+  // Exibir o número do pedido (opcional)
+  alert(`Seu número de pedido é: ${orderId}`); // Ou você pode exibir em um elemento HTML
 });
 
 
